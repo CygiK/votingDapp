@@ -10,5 +10,15 @@
     "hardhat": "^3.0.8",
     "typescript": "~5.8.0",
     "viem": "^2.38.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:script:local": "hardhat run scripts/deploy.ts",
+    "deploy:ignition:local": "hardhat ignition deploy ignition/modules/Voting.ts --network localhost"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0"
   }
 }

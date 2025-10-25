@@ -63,7 +63,7 @@ contract Voting is Ownable {
     event Voted (address voter, uint proposalId);
 
     // Constructeur du contrat qui initialise le propriétaire
-    constructor() Ownable(msg.sender) {    }
+    constructor() Ownable(msg.sender) {}
     
     // Modificateur qui vérifie si l'appelant est un votant enregistré
     modifier onlyVoters() {

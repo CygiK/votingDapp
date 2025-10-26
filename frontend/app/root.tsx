@@ -7,8 +7,33 @@ import {
   ScrollRestoration,
 } from "react-router";
 
+import '@rainbow-me/rainbowkit/styles.css';
+
+import {
+  getDefaultConfig,
+  RainbowKitProvider,
+} from '@rainbow-me/rainbowkit';
+import { WagmiProvider } from 'wagmi';
+import {
+  hardhat,
+  sepolia,
+} from 'wagmi/chains';
+import {
+  QueryClientProvider,
+  QueryClient,
+} from "@tanstack/react-query";
+
 import type { Route } from "./+types/root";
 import "./app.css";
+
+const config = getDefaultConfig({
+  appName: 'VotingDApp',
+  projectId: '43ad57af286e1c1ce143a75ef96efa3c',
+  chains: [hardhat, sepolia],
+  ssr: true,
+});
+
+const queryClient = new QueryClient();
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -42,7 +67,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+        <WagmiProvider config={config}>
+          <QueryClientProvider client={queryClient}>
+            <RainbowKitProvider>
+              <Outlet />
+            </RainbowKitProvider>
+          </QueryClientProvider>
+        </WagmiProvider> 
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

@@ -89,6 +89,11 @@ contract Voting is Ownable {
         return proposalsArray[_id];
     }
 
+    // Fonction qui retourne l'état actuel du workflow
+    function getWorkflowStatus() external view returns (WorkflowStatus) {
+        return workflowStatus;
+    }
+
     // ::::::::::::: REGISTRATION ::::::::::::: // 
 
     // Fonction pour ajouter un nouveau votant (accessible uniquement par le propriétaire)

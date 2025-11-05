@@ -4,8 +4,7 @@ export default [
     layout("routes/_layout.tsx", [
         index("routes/index.tsx"),
         route("admin", "routes/admin.tsx"),
-        route("vote", "routes/vote.tsx"),
-        route("proposals", "routes/proposals.tsx"),
+        route('voter', 'routes/voter.tsx'),
         route("results", "routes/results.tsx"),
     ]),
 ] satisfies RouteConfig;

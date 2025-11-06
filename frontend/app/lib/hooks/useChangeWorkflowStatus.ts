@@ -1,6 +1,6 @@
 import { VOTING_ABI, CONTRACT_ADDRESS, WORKFLOW_STEP_NAME } from '../../../core/web3/contants'
 
-import { useWriteContract, useAccount, useWaitForTransactionReceipt } from 'wagmi'
+import { useWriteContract, useAccount, useWaitForTransactionReceipt, useWatchContractEvent } from 'wagmi'
 import { publicClient } from '../../../core/web3/client'
 import  * as React from 'react'
 import { parseAbiItem } from 'viem';
@@ -8,7 +8,7 @@ import { parseAbiItem } from 'viem';
 export function useChangeWorkflowStatus() {
     const [logs, setLogs] = React.useState<any[]>([]);
 
-    const getEvent = async () => {
+    const getEvent = React.useCallback(async () => {
         console.log("Fetching logs...");
         const event = await publicClient.getLogs({
             address: CONTRACT_ADDRESS,
@@ -22,15 +22,41 @@ export function useChangeWorkflowStatus() {
 
         setLogs(event.map(log => ({
             oldValue: Number(log.args.previousStatus) ?? 0,
-            newValue: Number(log.args.newStatus) ?? 0
+            newValue: Number(log.args.newStatus) ?? 0,
+            blockNumber: log.blockNumber,
+            args: log.args
         })));
-    }
+    }, []);
 
-    const {data: hash, writeContract} = useWriteContract();
+    const {data: hash, writeContract, isPending} = useWriteContract();
     const { address } = useAccount();
+    
+    // Attendre la confirmation de la transaction
+    const { isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+        hash,
+    });
+
+    // Rafraîchir les événements après confirmation de la transaction
+    React.useEffect(() => {
+        console.log("isConfirmed changed:", isConfirmed);
+        if (isConfirmed) {
+            console.log("Transaction confirmed, refreshing events...");
+            getEvent();
+        }
+    }, [isConfirmed]);
+
+    // Écouter les événements WorkflowStatusChange en temps réel
+    useWatchContractEvent({
+        address: CONTRACT_ADDRESS,
+        abi: VOTING_ABI,
+        eventName: 'WorkflowStatusChange',
+        // onLogs: (newLogs) => {
+        //     console.log("New WorkflowStatusChange event detected:", newLogs);
+        //     getEvent(); // Rafraîchir tous les événements
+        // },
+    });
 
     function changeWorkflowStatus () {
-        // getEvent();
         writeContract({
             address: CONTRACT_ADDRESS,
             abi: VOTING_ABI,
@@ -39,5 +65,16 @@ export function useChangeWorkflowStatus() {
         });
     }
 
-    return { getEvent, logs, changeWorkflowStatus, currentStatus: {stepName: WORKFLOW_STEP_NAME[logs.length], stepNumber: logs.length, nextStepName: WORKFLOW_STEP_NAME[logs.length + 1]} };
+    return { 
+        getEvent, 
+        logs, 
+        changeWorkflowStatus, 
+        isPending,
+        isConfirmed,
+        currentStatus: {
+            stepName: WORKFLOW_STEP_NAME[logs.length], 
+            stepNumber: logs.length, 
+            nextStepName: WORKFLOW_STEP_NAME[logs.length + 1]
+        } 
+    };
 }

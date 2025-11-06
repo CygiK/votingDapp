@@ -4,3 +4,6 @@ export { useAddVoterToWhiteList } from "./useAddVoterToWhiteList";
 export { useChangeWorkflowStatus } from "./useChangeWorkflowStatus";
 export { useAddProposal } from "./useAddProposal";
 export { useGetProposal } from "./useGetProposal";
+export { useVote } from "./useVote";
+export { useGetWinner } from "./useGetWinner";
+export { useWorkflowStatus } from "./useWorkflowStatus";

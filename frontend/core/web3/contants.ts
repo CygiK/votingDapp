@@ -6,10 +6,10 @@ const VOTING_ABI = abi;
 const WORKFLOW_STEP_NAME = [
     "RegisteringVoters",
     "startProposalsRegistering",
-    "ProposalsRegistrationEnded",
-    "VotingSessionStarted",
-    "VotingSessionEnded",
-    "VotesTallied"
+    "endProposalsRegistering",
+    "startVotingSession",
+    "endVotingSession",
+    "tallyVotes"
 ] as const;
 
 

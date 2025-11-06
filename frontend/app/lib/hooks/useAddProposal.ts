@@ -15,5 +15,7 @@ export function useAddProposal() {
         });
     }
 
+    console.log('📄 useAddProposal - data:', data);
+
     return { addProposal, data };
 }

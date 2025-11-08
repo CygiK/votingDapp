@@ -10,19 +10,72 @@ import {
   FieldSet,
 } from "../ui/field"
 import { Card, CardContent } from "../ui/card";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { isAddress } from "viem";
 import * as React from "react";
 
+// TODO: gerer les cas d'un ajout de électeur déjà existant
+
 export function AddVoter() {
-        const { addVoterToWhiteList, isPending, isSuccess } = useAddVoterToWhiteList();
+    const { addVoterToWhiteList, isSuccess, isLoading } = useAddVoterToWhiteList();
     const [address, setAddress] = React.useState("");
+    const [lastAddedAddress, setLastAddedAddress] = React.useState("");
 
     const isValidAddress = isAddress(address);
 
+    // Gérer le succès de l'ajout
+    React.useEffect(() => {
+        if (isSuccess) {
+            setLastAddedAddress(address);
+            setAddress(""); // Réinitialiser le champ après succès
+        }
+    }, [isSuccess]);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (isValidAddress) {
+            addVoterToWhiteList(address as `0x${string}`);
+        }
+    };
+
     return (
-        <div>
-            <h2>Admin Dashboard</h2>
-            {isSuccess && <p>Voter added successfully! {address}</p>}
+        <div className="space-y-4">
+            <h2 className="text-2xl font-bold">Gestion des Électeurs</h2>
+            
+            {/* Notification de succès */}
+            {isSuccess && lastAddedAddress && (
+                <Alert className="bg-green-50 border-green-200 animate-in fade-in slide-in-from-top-2">
+                    <AlertTitle className="flex items-center gap-2 text-green-900">
+                        <span className="text-2xl">✅</span>
+                        Électeur ajouté avec succès !
+                    </AlertTitle>
+                    <AlertDescription className="mt-2 text-green-800">
+                        <div className="space-y-2">
+                            <p>L'adresse suivante a été ajoutée à la liste blanche :</p>
+                            <code className="block bg-white px-3 py-2 rounded border border-green-300 text-sm font-mono break-all">
+                                {lastAddedAddress}
+                            </code>
+                            <p className="text-sm">
+                                Cet électeur peut maintenant soumettre des propositions et voter.
+                            </p>
+                        </div>
+                    </AlertDescription>
+                </Alert>
+            )}
+
+            {/* Notification de traitement en cours */}
+            {/* {isPending && (
+                <Alert className="bg-blue-50 border-blue-200">
+                    <AlertTitle className="flex items-center gap-2 text-blue-900">
+                        <span className="text-2xl animate-spin">⏳</span>
+                        Transaction en cours...
+                    </AlertTitle>
+                    <AlertDescription className="text-blue-800">
+                        Veuillez patienter pendant que la transaction est confirmée sur la blockchain.
+                    </AlertDescription>
+                </Alert>
+            )} */}
+            
             <Card>
                 <CardContent>
                     <div className="flex flex-col gap-4">
@@ -32,30 +85,41 @@ export function AddVoter() {
                                     <FieldLegend>Ajouter un nouvel électeur</FieldLegend>
 
                                     <FieldGroup>
-                                    <Field>
-                                        <FieldLabel htmlFor="checkout-7j9-card-name-43j">
-                                           Address du voter
-                                        </FieldLabel>
-                                        <Input
-                                        id="checkout-7j9-card-name-43j"
-                                        placeholder="wallet address"
-                                        onChange={(e) => setAddress(e.target.value)}
-                                        required
-                                        />
-                                    </Field>
+                                        <Field>
+                                            <FieldLabel htmlFor="voter-address-input">
+                                                Adresse du voter
+                                            </FieldLabel>
+                                            <Input
+                                                id="voter-address-input"
+                                                placeholder="0x..."
+                                                value={address}
+                                                onChange={(e) => setAddress(e.target.value)}
+                                                required
+                                                className={address && !isValidAddress ? 'border-red-500' : ''}
+                                            />
+                                            {address && !isValidAddress && (
+                                                <p className="text-sm text-red-600 mt-1">
+                                                    ⚠️ Adresse Ethereum invalide
+                                                </p>
+                                            )}
+                                        </Field>
                                     </FieldGroup>
                                     <FieldDescription>
-                                        Ajout d'un nouvelle adresse de voter à la whitelist
+                                        Ajoutez une nouvelle adresse à la liste blanche des électeurs.
+                                        L'adresse doit être une adresse Ethereum valide (0x...).
                                     </FieldDescription>
                                 </FieldSet>
                                 <Field orientation="horizontal">
                                     <Button 
-                                        type="submit" disabled={!isValidAddress || !isPending}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            addVoterToWhiteList(address as `0x${string}`);
-                                        }}
-                                    >Add</Button>
+                                        type="submit" 
+                                        disabled={!isValidAddress || isLoading}
+                                        onClick={handleSubmit}
+                                        className="min-w-[120px]"
+                                    >
+                                            <span className="flex items-center gap-2">
+                                                ➕ Ajouter
+                                            </span>
+                                    </Button>
                                 </Field>
                             </FieldGroup>
                         </form>

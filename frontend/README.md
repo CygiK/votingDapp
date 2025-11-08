@@ -1,18 +1,22 @@
-# Welcome to React Router!
+# Frontend - Voting DApp
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Interface utilisateur de l'application décentralisée de vote construite avec React Router, Wagmi et RainbowKit.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## 🎯 Fonctionnalités
 
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+- � **Connexion Wallet** : Intégration RainbowKit pour une connexion facile
+- 👑 **Dashboard Administrateur** : Gestion complète du processus de vote
+  - Ajout d'électeurs à la liste blanche
+  - Gestion des phases du workflow
+  - Démarrage/fin de l'enregistrement des propositions
+  - Démarrage/fin de la session de vote
+  - Comptabilisation des votes
+- �️ **Dashboard Électeur** : Interface pour les votants enregistrés
+  - Soumission de propositions
+  - Vote pour une proposition
+  - Consultation des propositions et résultats
+- � **Page Résultats** : Affichage public des résultats après décompte
+- 🎨 **UI Moderne** : Design responsive avec Tailwind CSS et shadcn/ui
 
 ## Getting Started
 

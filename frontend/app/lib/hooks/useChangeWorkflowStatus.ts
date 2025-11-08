@@ -18,8 +18,6 @@ export function useChangeWorkflowStatus() {
 
         });
 
-        console.log("Fetched logs:", event);
-
         setLogs(event.map(log => ({
             oldValue: Number(log.args.previousStatus) ?? 0,
             newValue: Number(log.args.newStatus) ?? 0,
@@ -45,16 +43,13 @@ export function useChangeWorkflowStatus() {
         }
     }, [isConfirmed]);
 
+    // pas justifié !!!
     // Écouter les événements WorkflowStatusChange en temps réel
-    useWatchContractEvent({
-        address: CONTRACT_ADDRESS,
-        abi: VOTING_ABI,
-        eventName: 'WorkflowStatusChange',
-        // onLogs: (newLogs) => {
-        //     console.log("New WorkflowStatusChange event detected:", newLogs);
-        //     getEvent(); // Rafraîchir tous les événements
-        // },
-    });
+    // useWatchContractEvent({
+    //     address: CONTRACT_ADDRESS,
+    //     abi: VOTING_ABI,
+    //     eventName: 'WorkflowStatusChange',
+    // });
 
     function changeWorkflowStatus () {
         writeContract({

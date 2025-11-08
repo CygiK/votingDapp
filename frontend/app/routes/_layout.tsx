@@ -1,8 +1,9 @@
-'use client';
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import * as React from "react";
 import { Link, Outlet, useLocation } from "react-router";
 import { useAccount } from "wagmi";
 import { userIsVoter, userIsOwner } from "~/lib/hooks";
+
 
 /**
  * Layout principal de l'application
@@ -13,8 +14,6 @@ export default function Layout(): React.ReactNode {
     const { isVoter } = userIsVoter();
     const isOwner = userIsOwner();
     const location = useLocation();
-
-    console.log(isVoter);
 
     // Fonction pour déterminer si un lien est actif
     const isActive = (path: string) => {
@@ -47,7 +46,7 @@ export default function Layout(): React.ReactNode {
                         </Link>
                     )}
                     
-                    {isConnected && isVoter && !isOwner && (
+                    {isConnected && isVoter && (
                         <Link 
                             to="/voter" 
                             className={`hover:text-blue-600 transition-colors ${isActive("/voter")}`}
@@ -55,13 +54,6 @@ export default function Layout(): React.ReactNode {
                             Espace Électeur
                         </Link>
                     )}
-                    
-                    {/* <Link 
-                        to="/results" 
-                        className={`hover:text-blue-600 transition-colors ${isActive("/results")}`}
-                    >
-                        Résultats
-                    </Link> */}
                 </nav>
             </header>
             

@@ -1,11 +1,12 @@
 import type { MetaFunction } from "react-router";
 import { useAccount } from "wagmi";
-import { userIsOwner, userIsVoter, useWorkflowStatus, useGetProposal } from "~/lib/hooks";
+import { userIsOwner, userIsVoter, useWorkflowStatus, useGetProposal, useGetWinner } from "~/lib/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Separator } from "~/components/ui/separator";
 import { Button } from "~/components/ui/button";
 import { Link } from "react-router";
+import { Results } from "~/components/shared/results";
 
 export const meta: MetaFunction = () => {
     return [
@@ -153,8 +154,14 @@ export default function Index() {
 
             <Separator />
 
+            {/* Section Résultats */}
+            {isVotesTallied && (
+                <Results />
+            )}
+
+            <Separator />
             {/* Section À propos */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="gap-6">
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
@@ -189,57 +196,7 @@ export default function Index() {
                         </div>
                     </CardContent>
                 </Card>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <span className="text-2xl">🔐</span>
-                            Pourquoi la blockchain ?
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-3">
-                            {[
-                                { icon: '🛡️', title: 'Sécurité', desc: 'Votes immuables et infalsifiables' },
-                                { icon: '👁️', title: 'Transparence', desc: 'Processus vérifiable par tous' },
-                                { icon: '🔒', title: 'Confidentialité', desc: 'Identité des votants protégée' },
-                                { icon: '⚡', title: 'Autonomie', desc: 'Pas d\'intermédiaire centralisé' }
-                            ].map((feature, index) => (
-                                <div key={index} className="flex items-start gap-3">
-                                    <span className="text-2xl">{feature.icon}</span>
-                                    <div>
-                                        <div className="font-semibold">{feature.title}</div>
-                                        <div className="text-sm text-gray-600">{feature.desc}</div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
             </div>
-
-            {/* Section Résultats */}
-            {isVotesTallied && (
-                <Card className="bg-linear-to-r from-yellow-50 to-amber-50 border-yellow-200 border-2">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <span className="text-3xl">🏆</span>
-                            <span className="text-yellow-900">Résultats disponibles !</span>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                        <p className="text-lg text-yellow-900">
-                            Le vote est terminé et les résultats ont été comptabilisés.
-                            Découvrez la proposition gagnante !
-                        </p>
-                        <Link to="/results">
-                            <Button className="bg-yellow-600 hover:bg-yellow-700 text-white">
-                                Voir les Résultats 🎉
-                            </Button>
-                        </Link>
-                    </CardContent>
-                </Card>
-            )}
 
             {/* Footer info */}
             <Card className="bg-gray-50">

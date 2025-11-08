@@ -1,19 +1,17 @@
 import * as React from "react";
 import { AddProposals } from "./shared/addProposals";
 import { ProposalList } from "./shared/proposalLIst";
-import { Vote } from "./shared/vote";
 import { Results } from "./shared/results";
-import StatusBanner from "./shared/statusBanner";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { useWorkflowStatus } from "~/lib/hooks";
+import { useWorkflowStatus, userIsOwner } from "~/lib/hooks";
 
 /**
  * Dashboard pour les électeurs enregistrés
  * Affiche les fonctionnalités appropriées selon la phase du vote
  */
 export function VoterDashboard(): React.ReactNode {
-    const { status, currentPhase, getColorClasses } = useWorkflowStatus();
+    const { status, currentPhase, getColorClasses, isRegisteringVoters, isProposalsRegistrationStarted, isProposalsRegistrationEnded, isVotingSessionStarted, isVotingSessionEnded, isVotesTallied } = useWorkflowStatus();
 
     return (
         <div className="space-y-6">
@@ -36,10 +34,8 @@ export function VoterDashboard(): React.ReactNode {
                 </AlertDescription>
             </Alert>
 
-            {/* <StatusBanner /> */}
-
             {/* Phase 0: Enregistrement des votants */}
-            {status === 0 && (
+            {isRegisteringVoters && (
                 <Card>
                     <CardContent className="pt-6">
                         <p className="text-gray-600 text-center py-8">
@@ -50,7 +46,7 @@ export function VoterDashboard(): React.ReactNode {
             )}
 
             {/* Phase 1: Enregistrement des propositions */}
-            {status === 1 && (
+            {isProposalsRegistrationStarted && (
                 <div className="space-y-4">
                     <Card className={getColorClasses('purple').border}>
                         <CardHeader>
@@ -83,7 +79,7 @@ export function VoterDashboard(): React.ReactNode {
             )}
 
             {/* Phase 2: Propositions enregistrées, en attente du vote */}
-            {status === 2 && (
+            {isProposalsRegistrationEnded && (
                 <div className="space-y-4">
                     <Card>
                         <CardHeader>
@@ -102,7 +98,7 @@ export function VoterDashboard(): React.ReactNode {
             )}
 
             {/* Phase 3: Session de vote active */}
-            {status === 3 && (
+            {isVotingSessionStarted && (
                 <Card className={getColorClasses('green').border}>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
@@ -113,13 +109,14 @@ export function VoterDashboard(): React.ReactNode {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Vote />
+                        <ProposalList />
+                        {/* <Vote /> */}
                     </CardContent>
                 </Card>
             )}
 
             {/* Phase 4: Vote terminé, en attente du décompte */}
-            {status === 4 && (
+            {isVotingSessionEnded && (
                 <div className="space-y-4">
                     <Card>
                         <CardHeader>
@@ -138,7 +135,7 @@ export function VoterDashboard(): React.ReactNode {
             )}
 
             {/* Phase 5: Résultats disponibles */}
-            {status === 5 && (
+            {isVotesTallied && (
                 <Card className={getColorClasses('yellow').border}>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">

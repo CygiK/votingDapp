@@ -5,6 +5,5 @@ export default [
         index("routes/index.tsx"),
         route("admin", "routes/admin.tsx"),
         route('voter', 'routes/voter.tsx'),
-        route("results", "routes/results.tsx"),
     ]),
 ] satisfies RouteConfig;

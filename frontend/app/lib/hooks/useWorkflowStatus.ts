@@ -82,7 +82,7 @@ export function useWorkflowStatus() {
         }
     };
 
-    const currentPhase = phaseInfo[status] || phaseInfo[0];
+    const currentPhase = phaseInfo[status];
 
     // Fonction helper pour obtenir les classes Tailwind de couleur
     const getColorClasses = (color: string) => {

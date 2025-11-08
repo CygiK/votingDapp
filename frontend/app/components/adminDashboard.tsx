@@ -7,13 +7,27 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/
 import { Separator } from "./ui/separator";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { useWorkflowStatus } from "~/lib/hooks";
+import { useAccount } from "wagmi";
+import { Results } from "./shared/results";
 
 /**
  * Dashboard Administrateur
  * Interface complète pour gérer le processus de vote
  */
 export function AdminDashboard(): React.ReactNode {
-    const { status, currentPhase, getColorClasses } = useWorkflowStatus();
+    const { status, currentPhase, getColorClasses, isProposalsRegistrationStarted, isRegisteringVoters, isVotesTallied } = useWorkflowStatus();
+    const { isConnected } = useAccount();
+
+    if(!isConnected) {
+        return (
+            <Alert variant="destructive">
+                <AlertTitle>❌ Non Connecté</AlertTitle>
+                <AlertDescription>
+                    Veuillez vous connecter avec votre portefeuille pour accéder au tableau de bord administrateur.
+                </AlertDescription>
+            </Alert>
+        );
+    }
 
     return (
         <div className="space-y-6">
@@ -43,7 +57,7 @@ export function AdminDashboard(): React.ReactNode {
             <Separator className="my-6" />
 
             {/* Section Gestion des Électeurs - visible en phase 0 */}
-            {status === 0 && (
+            {isRegisteringVoters && (
                 <Card className={getColorClasses('blue').border}>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
@@ -59,11 +73,20 @@ export function AdminDashboard(): React.ReactNode {
                 </Card>
             )}
 
+            <Separator className="my-6" />
+
+            {/* Section Résultats - visible en phase 5 */}
+            {isVotesTallied && (
+                <Results />
+            )}
+
+            <Separator className="my-6" />
+
             {/* Section Propositions - visible en phase 1+ */}
             {status >= 1 && (
                 <div className="space-y-4">
                     {/* Ajout de propositions - visible en phase 1 */}
-                    {status === 1 && (
+                    {isProposalsRegistrationStarted && (
                         <Card className={getColorClasses('purple').border}>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
@@ -95,59 +118,6 @@ export function AdminDashboard(): React.ReactNode {
                     </Card>
                 </div>
             )}
-
-            {/* Guide des actions selon la phase */}
-            <Card className="bg-gray-50">
-                <CardHeader>
-                    <CardTitle className="text-base">ℹ️ Actions Disponibles</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="text-sm space-y-2">
-                        {status === 0 && (
-                            <ul className="list-disc list-inside space-y-1 text-gray-700">
-                                <li>Ajoutez tous les électeurs nécessaires</li>
-                                <li>Vérifiez les adresses avant de continuer</li>
-                                <li>Cliquez sur "Passer à : startProposalsRegistering" pour commencer</li>
-                            </ul>
-                        )}
-                        {status === 1 && (
-                            <ul className="list-disc list-inside space-y-1 text-gray-700">
-                                <li>Les électeurs peuvent soumettre leurs propositions</li>
-                                <li>Vous pouvez aussi ajouter des propositions</li>
-                                <li>Une fois toutes les propositions reçues, terminez cette phase</li>
-                            </ul>
-                        )}
-                        {status === 2 && (
-                            <ul className="list-disc list-inside space-y-1 text-gray-700">
-                                <li>Vérifiez la liste des propositions</li>
-                                <li>Assurez-vous que tout est correct</li>
-                                <li>Démarrez la session de vote quand vous êtes prêt</li>
-                            </ul>
-                        )}
-                        {status === 3 && (
-                            <ul className="list-disc list-inside space-y-1 text-gray-700">
-                                <li>Les électeurs peuvent maintenant voter</li>
-                                <li>Attendez que tous aient voté</li>
-                                <li>Terminez la session de vote pour passer au décompte</li>
-                            </ul>
-                        )}
-                        {status === 4 && (
-                            <ul className="list-disc list-inside space-y-1 text-gray-700">
-                                <li>Le vote est terminé</li>
-                                <li>Cliquez sur "tallyVotes" pour comptabiliser</li>
-                                <li>Le gagnant sera déterminé automatiquement</li>
-                            </ul>
-                        )}
-                        {status === 5 && (
-                            <ul className="list-disc list-inside space-y-1 text-gray-700">
-                                <li>Le processus est terminé ✅</li>
-                                <li>Les résultats sont disponibles sur la page dédiée</li>
-                                <li>Un nouveau vote nécessite un nouveau déploiement du contrat</li>
-                            </ul>
-                        )}
-                    </div>
-                </CardContent>
-            </Card>
         </div>
     );
 }

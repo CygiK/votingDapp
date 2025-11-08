@@ -7,3 +7,4 @@ export { useGetProposal } from "./useGetProposal";
 export { useVote } from "./useVote";
 export { useGetWinner } from "./useGetWinner";
 export { useWorkflowStatus } from "./useWorkflowStatus";
+export { useGetVoterFromWhiteList } from "./useGetVoterFromWhiteList";

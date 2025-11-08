@@ -152,31 +152,6 @@ export function WorkflowStatusManagement(): React.ReactNode {
                     )}
                 </CardContent>
             </Card>
-
-            {/* Légende des phases */}
-            {/* <details className="text-sm">
-                <summary className="cursor-pointer font-medium text-gray-700 hover:text-gray-900 mb-2">
-                    ℹ️ Voir toutes les phases du workflow
-                </summary>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                    {Object.entries(phaseInfo).map(([key, info]) => (
-                        <div 
-                            key={key}
-                            className={`p-3 rounded-lg border ${info.color} ${
-                                currentStatus.stepName === key ? 'ring-2 ring-blue-500' : ''
-                            }`}
-                        >
-                            <div className="flex items-start gap-2">
-                                <span className="text-xl">{info.emoji}</span>
-                                <div>
-                                    <p className="font-semibold text-sm">{key}</p>
-                                    <p className="text-xs text-gray-600 mt-1">{info.description}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </details> */}
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import { VoterDashboard } from "~/components/voterDashboard";
-import { userIsVoter } from "~/lib/hooks";
+import { userIsVoter, userIsOwner } from "~/lib/hooks";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { useAccount } from "wagmi";
 
@@ -41,7 +41,6 @@ export default function Voter() {
 
     return (
         <div className="space-y-4">
-            {/* <h1 className="text-3xl font-bold">Espace Électeur</h1> */}
             <VoterDashboard />
         </div>
     );

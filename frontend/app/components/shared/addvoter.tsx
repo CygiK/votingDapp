@@ -14,6 +14,8 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { isAddress } from "viem";
 import * as React from "react";
 
+// TODO: gerer les cas d'un ajout de électeur déjà existant
+
 export function AddVoter() {
     const { addVoterToWhiteList, isSuccess, isLoading } = useAddVoterToWhiteList();
     const [address, setAddress] = React.useState("");
@@ -23,11 +25,11 @@ export function AddVoter() {
 
     // Gérer le succès de l'ajout
     React.useEffect(() => {
-        if (isSuccess && address) {
+        if (isSuccess) {
             setLastAddedAddress(address);
             setAddress(""); // Réinitialiser le champ après succès
         }
-    }, [isSuccess, address]);
+    }, [isSuccess]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

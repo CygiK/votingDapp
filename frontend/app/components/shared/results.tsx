@@ -79,33 +79,6 @@ export function Results(): React.ReactNode {
                     </CardContent>
                 </Card>
             )}
-
-            <div>
-                <h3 className="text-xl font-bold mb-4">📊 Statistiques</h3>
-                <Card>
-                    <CardContent className="pt-6">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="text-center">
-                                <p className="text-3xl font-bold text-blue-600">{logs.length}</p>
-                                <p className="text-sm text-gray-600">Propositions totales</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-3xl font-bold text-purple-600">
-                                    {winningProposal?.voteCount?.toString() || '0'}
-                                </p>
-                                <p className="text-sm text-gray-600">Votes pour le gagnant</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
-
-            <Alert>
-                <AlertTitle>ℹ️ Information</AlertTitle>
-                <AlertDescription>
-                    Le vote est terminé et les résultats ont été comptabilisés de manière transparente sur la blockchain.
-                </AlertDescription>
-            </Alert>
         </div>
     );
 }

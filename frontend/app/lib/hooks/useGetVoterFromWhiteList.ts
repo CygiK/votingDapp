@@ -1,43 +1,24 @@
-import { VOTING_ABI, CONTRACT_ADDRESS, WORKFLOW_STEP_NAME } from '../../../core/web3/contants'
+import { VOTING_ABI, CONTRACT_ADDRESS, WORKFLOW_STEP_NAME  } from '../../../core/web3/contants'
 
-import { useWriteContract, useAccount, useWaitForTransactionReceipt } from 'wagmi'
-import { publicClient } from '../../../core/web3/client'
+import { useReadContract, useAccount, useWaitForTransactionReceipt } from 'wagmi'
 import  * as React from 'react'
 import { parseAbiItem } from 'viem';
 
-export function useChangeWorkflowStatus() {
-    const [logs, setLogs] = React.useState<any[]>([]);
+type Voter = {
+    isRegistered: boolean;
+    hasVoted: boolean;
+    votedProposalId: bigint;
+};
 
-    const getEvent = async () => {
-        console.log("Fetching logs...");
-        const event = await publicClient.getLogs({
-            address: CONTRACT_ADDRESS,
-            event: parseAbiItem('event WorkflowStatusChange(uint8 previousStatus, uint8 newStatus)'),
-            fromBlock: 0n,
-            toBlock: 'latest',
-
-        });
-
-        console.log("Fetched logs:", event);
-
-        setLogs(event.map(log => ({
-            oldValue: Number(log.args.previousStatus) ?? 0,
-            newValue: Number(log.args.newStatus) ?? 0
-        })));
-    }
-
-    const {data: hash, writeContract} = useWriteContract();
+export function useGetVoterFromWhiteList(): Voter {
     const { address } = useAccount();
 
-    function changeWorkflowStatus () {
-        // getEvent();
-        writeContract({
-            address: CONTRACT_ADDRESS,
-            abi: VOTING_ABI,
-            functionName: WORKFLOW_STEP_NAME[logs.length + 1],
-            account: address,
-        });
-    }
+    const { data: voter } = useReadContract({
+        abi: VOTING_ABI,
+        address: CONTRACT_ADDRESS,
+        functionName: 'getVoter',
+        args: [address],
+    });
 
-    return { getEvent, logs, changeWorkflowStatus, currentStatus: {stepName: WORKFLOW_STEP_NAME[logs.length], stepNumber: logs.length, nextStepName: WORKFLOW_STEP_NAME[logs.length + 1]} };
+    return voter as Voter;
 }

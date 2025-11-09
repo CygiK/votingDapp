@@ -1,0 +1,136 @@
+{
+  "buildManifest": {
+    "serverBundles": {
+      "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0": {
+        "id": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+        "file": "build/server/nodejs_eyJydW50aW1lIjoibm9kZWpzIn0/index.js",
+        "config": {
+          "runtime": "nodejs"
+        }
+      }
+    },
+    "routeIdToServerBundleId": {
+      "root": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/index": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/admin": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0",
+      "routes/voter": "nodejs_eyJydW50aW1lIjoibm9kZWpzIn0"
+    },
+    "routes": {
+      "root": {
+        "id": "root",
+        "file": "app/root.tsx",
+        "path": "",
+        "config": {
+          "runtime": "nodejs"
+        }
+      },
+      "routes/_layout": {
+        "id": "routes/_layout",
+        "parentId": "root",
+        "file": "app/routes/_layout.tsx",
+        "config": {}
+      },
+      "routes/index": {
+        "id": "routes/index",
+        "parentId": "routes/_layout",
+        "file": "app/routes/index.tsx",
+        "index": true,
+        "config": {}
+      },
+      "routes/admin": {
+        "id": "routes/admin",
+        "parentId": "routes/_layout",
+        "file": "app/routes/admin.tsx",
+        "path": "admin",
+        "config": {}
+      },
+      "routes/voter": {
+        "id": "routes/voter",
+        "parentId": "routes/_layout",
+        "file": "app/routes/voter.tsx",
+        "path": "voter",
+        "config": {}
+      }
+    }
+  },
+  "reactRouterConfig": {
+    "appDirectory": "/Users/cygik/Documents/workspace/votingDapp/frontend/app",
+    "basename": "/",
+    "buildDirectory": "/Users/cygik/Documents/workspace/votingDapp/frontend/build",
+    "future": {
+      "v8_middleware": false,
+      "unstable_optimizeDeps": false,
+      "unstable_splitRouteModules": false,
+      "unstable_subResourceIntegrity": false,
+      "unstable_viteEnvironmentApi": false
+    },
+    "routes": {
+      "root": {
+        "id": "root",
+        "file": "root.tsx",
+        "path": ""
+      },
+      "routes/_layout": {
+        "id": "routes/_layout",
+        "parentId": "root",
+        "file": "routes/_layout.tsx"
+      },
+      "routes/index": {
+        "id": "routes/index",
+        "parentId": "routes/_layout",
+        "file": "routes/index.tsx",
+        "index": true
+      },
+      "routes/admin": {
+        "id": "routes/admin",
+        "parentId": "routes/_layout",
+        "file": "routes/admin.tsx",
+        "path": "admin"
+      },
+      "routes/voter": {
+        "id": "routes/voter",
+        "parentId": "routes/_layout",
+        "file": "routes/voter.tsx",
+        "path": "voter"
+      }
+    },
+    "routeDiscovery": {
+      "mode": "lazy",
+      "manifestPath": "/__manifest"
+    },
+    "serverBuildFile": "index.js",
+    "serverModuleFormat": "esm",
+    "ssr": true,
+    "unstable_routeConfig": [
+      {
+        "id": "root",
+        "path": "",
+        "file": "root.tsx",
+        "children": [
+          {
+            "file": "routes/_layout.tsx",
+            "children": [
+              {
+                "file": "routes/index.tsx",
+                "index": true
+              },
+              {
+                "file": "routes/admin.tsx",
+                "path": "admin"
+              },
+              {
+                "file": "routes/voter.tsx",
+                "path": "voter"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "viteConfig": {
+    "build": {
+      "assetsDir": "assets"
+    }
+  }
+}

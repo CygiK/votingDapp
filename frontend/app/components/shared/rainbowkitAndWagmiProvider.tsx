@@ -18,7 +18,7 @@ const config = getDefaultConfig({
   appName: 'VotingDApp',
   projectId: '43ad57af286e1c1ce143a75ef96efa3c',
   chains: [hardhat, sepolia],
-  ssr: true,
+  ssr: false, // Désactivé pour éviter les problèmes ESM/CommonJS sur Vercel
 });
 
 const queryClient = new QueryClient();

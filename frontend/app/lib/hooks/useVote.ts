@@ -1,16 +1,6 @@
 import { useWriteContract, useWaitForTransactionReceipt, useChainId } from 'wagmi';
 import { CONTRACT_ADDRESS, VOTING_ABI, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants';
-
-/**
- * Hook personnalisé pour permettre à un électeur de voter pour une proposition
- * 
- * @returns {Object} Objet contenant les fonctions et états du vote
- * @returns {Function} vote - Fonction pour voter pour une proposition donnée
- * @returns {boolean} isPending - Indique si la transaction est en cours
- * @returns {boolean} isConfirming - Indique si la transaction est en cours de confirmation
- * @returns {boolean} isConfirmed - Indique si la transaction est confirmée
- * @returns {string} hash - Hash de la transaction
- */
+import { addressbyChainIdAndEnv } from '../../../core/web3/utils';
 export function useVote() {
     const { data: hash, writeContract, isPending } = useWriteContract();
     const chainId = useChainId();
@@ -26,7 +16,7 @@ export function useVote() {
      */
     const vote = (proposalId: bigint) => {
         writeContract({
-            address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
+            address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
             abi: VOTING_ABI,
             functionName: 'setVote',
             args: [proposalId],

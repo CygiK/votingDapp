@@ -1,6 +1,7 @@
 import * as React from "react";
-import { useReadContracts, useReadContract, useAccount } from 'wagmi';
-import { CONTRACT_ADDRESS, VOTING_ABI } from '../../../core/web3/contants';
+import { useReadContracts, useReadContract, useAccount, useChainId } from 'wagmi';
+import { CONTRACT_ADDRESS, VOTING_ABI, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants';
+import { addressbyChainIdAndEnv } from '../../../core/web3/utils';
 import { useGetProposal, useVote } from "~/lib/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
@@ -10,12 +11,13 @@ export function Vote(): React.ReactNode {
     const { logs } = useGetProposal();
     const { vote, isPending, isConfirming, isConfirmed } = useVote();
     const { address } = useAccount();
+    const chainId = useChainId();
     const [proposals, setProposals] = React.useState<any[]>([]);
     const [hasVoted, setHasVoted] = React.useState(false);
     const [votedProposalId, setVotedProposalId] = React.useState<bigint | null>(null);
 
     const proposalCalls = logs.map(log => ({
-        address: CONTRACT_ADDRESS,
+        address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
         abi: VOTING_ABI as any,
         functionName: 'getOneProposal' as const,
         args: [log.args.proposalId],
@@ -26,7 +28,7 @@ export function Vote(): React.ReactNode {
     });
 
     const { data: voterData }: any = useReadContract({
-            address: CONTRACT_ADDRESS,
+            address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
             abi: VOTING_ABI as any,
             functionName: 'getVoter' as const,
             args: [address as `0x${string}` ],

@@ -1,5 +1,6 @@
 import { useReadContract, useChainId } from 'wagmi';
 import { CONTRACT_ADDRESS, VOTING_ABI, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants';
+import { addressbyChainIdAndEnv } from '../../../core/web3/utils';
 
 export function useGetWinner() {
     // Récupère l'ID de la proposition gagnante
@@ -9,7 +10,7 @@ export function useGetWinner() {
         isLoading: isLoadingId,
         isError: isErrorId 
     } = useReadContract({
-        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
+        address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
         abi: VOTING_ABI,
         functionName: 'winningProposalID',
     });
@@ -20,7 +21,7 @@ export function useGetWinner() {
         isLoading: isLoadingProposal,
         isError: isErrorProposal 
     } = useReadContract({
-        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
+        address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
         abi: VOTING_ABI,
         functionName: 'getOneProposal',
         args: [winningProposalId as bigint],

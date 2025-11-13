@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useReadContract, useChainId } from 'wagmi';
 import { CONTRACT_ADDRESS, CONTRACT_ADDRESS_MAP, VOTING_ABI } from '../../../core/web3/contants';
+import { addressbyChainIdAndEnv } from '../../../core/web3/utils';
 import { useGetWinner, useGetProposal } from "~/lib/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
@@ -12,7 +13,7 @@ export function Results(): React.ReactNode {
     const chainId = useChainId();
     
     const { data: workflowStatus } = useReadContract({
-        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
+        address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
         abi: VOTING_ABI,
         functionName: 'getWorkflowStatus',
     });

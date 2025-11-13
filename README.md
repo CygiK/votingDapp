@@ -1,223 +1,347 @@
-# Voting DApp
+# 🗳️ Voting DApp - Application de Vote Décentralisée
 
-## 📋 Description
+<div align="center">
 
-Application décentralisée (DApp) de vote développée avec Hardhat 3 pour le backend blockchain et React Router pour le frontend. Ce projet suit les principes du Software Craftsmanship et les bonnes pratiques du Clean Code.
+![Blockchain](https://img.shields.io/badge/Blockchain-Ethereum-blue)
+![Solidity](https://img.shields.io/badge/Solidity-0.8.28-363636)
+![React](https://img.shields.io/badge/React-19-61dafb)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## 🎯 Objectifs
+**Une application de vote transparente, sécurisée et décentralisée sur la blockchain Ethereum**
 
-- Créer une application de vote sécurisée sur la blockchain
-- Implémenter des tests complets (frontend et backend)
-- Respecter les principes du Clean Code et du Software Craftsmanship
-- Fournir une documentation complète et claire
+[Démarrage Rapide](#-démarrage-rapide) • [Fonctionnalités](#-fonctionnalités) • [Documentation](#-documentation) • [Technologies](#-technologies)
+
+</div>
+
+---
+
+## 📋 Qu'est-ce que c'est ?
+
+**Voting DApp** est une application décentralisée permettant d'organiser des votes **transparents**, **sécurisés** et **infalsifiables** grâce à la technologie blockchain.
+
+### 🎯 Pourquoi utiliser la blockchain pour voter ?
+
+- **🔒 Sécurité** : Les votes sont stockés de manière immuable sur la blockchain
+- **👁️ Transparence** : Tout le processus est vérifiable publiquement
+- **🛡️ Intégrité** : Impossible de modifier ou supprimer un vote après son enregistrement
+- **⚡ Autonomie** : Pas besoin d'intermédiaire centralisé
+- **🔐 Confidentialité** : Seule l'adresse wallet est visible, pas l'identité
+
+### ✨ Cas d'usage
+
+- Votes communautaires pour des projets Web3
+- Décisions collectives dans une DAO
+- Élections internes d'organisations
+- Sondages décentralisés avec preuve on-chain
+
+## 🎯 Fonctionnalités Principales
+
+## 🎯 Fonctionnalités Principales
+
+### Pour l'Administrateur 👑
+
+- ✅ Ajouter des électeurs à la liste blanche
+- ✅ Gérer les 6 phases du workflow de vote
+- ✅ Démarrer/arrêter l'enregistrement des propositions
+- ✅ Démarrer/arrêter la session de vote
+- ✅ Comptabiliser les votes et proclamer le gagnant
+
+### Pour les Électeurs �️
+
+- ✅ Soumettre des propositions pendant la phase d'enregistrement
+- ✅ Consulter toutes les propositions enregistrées
+- ✅ Voter pour une proposition (un vote par électeur)
+- ✅ Voir les résultats après la comptabilisation
+
+### Pour Tous 👀
+
+- ✅ Consulter l'état actuel du vote
+- ✅ Voir les statistiques en temps réel
+- ✅ Accéder aux résultats finaux après le décompte
+
+## 🚀 Démarrage Rapide
+
+### Prérequis
+
+Avant de commencer, assurez-vous d'avoir :
+
+- **Node.js** (v20 ou supérieur)
+- **npm** ou **pnpm**
+- **MetaMask** ou un autre wallet Ethereum
+
+### Installation en 3 étapes
+
+#### 1️⃣ Cloner le projet
+
+```bash
+git clone https://github.com/CygiK/votingDapp.git
+cd votingDapp
+```
+
+#### 2️⃣ Démarrer le backend (blockchain locale)
+
+```bash
+cd backend
+npm install
+npx hardhat node  # Laissez ce terminal ouvert
+```
+
+Dans un **nouveau terminal** :
+
+```bash
+cd backend
+npx hardhat ignition deploy ignition/modules/Voting.ts --network localhost
+```
+
+📝 **Important** : Copiez l'adresse du contrat déployé (elle ressemble à `0x5FbDB2315678afecb367f032d93F642f64180aa3`)
+
+#### 3️⃣ Démarrer le frontend
+
+```bash
+cd frontend
+npm install
+
+# Configurez l'adresse du contrat
+# Éditez frontend/core/web3/contants.ts et remplacez CONTRACT_ADDRESS par l'adresse copiée
+
+npm run dev
+```
+
+🎉 **C'est prêt !** Ouvrez http://localhost:5173 dans votre navigateur
+
+### Configuration MetaMask
+
+1. Ouvrez MetaMask
+2. Ajoutez le réseau Hardhat :
+   - **Nom** : Hardhat Local
+   - **RPC URL** : http://localhost:8545
+   - **Chain ID** : 31337
+   - **Symbole** : ETH
+
+3. Importez un compte de test depuis Hardhat (voir les clés privées dans le terminal où tourne `hardhat node`)
 
 ## 🛠️ Technologies
 
-### Backend
-- **Hardhat 3** - Framework de développement Ethereum
-- **Solidity** - Langage de smart contracts
-- **Viem** - Bibliothèque d'interaction blockchain
+### Backend Blockchain
 
-### Frontend
-- **React** - Bibliothèque UI
-- **React Router** - Gestion de la navigation
-- **Wagmi** - Hooks React pour Ethereum
-- **Viem** - Client TypeScript pour Ethereum
+| Technologie | Version | Description |
+|------------|---------|-------------|
+| **Hardhat** | 3.x | Framework de développement Ethereum |
+| **Solidity** | 0.8.28 | Langage des smart contracts |
+| **Viem** | 2.x | Bibliothèque d'interaction blockchain |
+| **OpenZeppelin** | 5.x | Contrats sécurisés standard |
+
+### Frontend Web3
+
+| Technologie | Version | Description |
+|------------|---------|-------------|
+| **React** | 19.x | Bibliothèque UI |
+| **React Router** | 7.x | Navigation SPA |
+| **Wagmi** | 2.x | Hooks React pour Ethereum |
+| **RainbowKit** | 2.x | Connexion wallet intuitive |
+| **Viem** | 2.x | Client TypeScript Ethereum |
+| **Tailwind CSS** | 4.x | Framework CSS utilitaire |
+| **shadcn/ui** | - | Composants UI modernes |
 
 ## 📁 Structure du Projet
 
 ```
 votingDapp/
-├── contracts/          # Smart contracts Solidity
-├── test/              # Tests backend (Hardhat)
-├── scripts/           # Scripts de déploiement
-├── frontend/          # Application React
-│   ├── src/
-│   └── tests/        # Tests frontend
-└── README.md
+├── 📂 backend/                 # Smart contracts et configuration blockchain
+│   ├── contracts/             # Contrats Solidity
+│   │   └── voting.sol        # Contrat principal de vote
+│   ├── test/                 # Tests des contrats
+│   ├── ignition/modules/     # Scripts de déploiement
+│   └── hardhat.config.ts     # Configuration Hardhat
+│
+├── 📂 frontend/               # Application React
+│   ├── app/
+│   │   ├── components/       # Composants React
+│   │   │   ├── adminDashboard.tsx
+│   │   │   ├── voterDashboard.tsx
+│   │   │   └── shared/       # Composants réutilisables
+│   │   ├── lib/hooks/        # Hooks personnalisés Web3
+│   │   ├── routes/           # Pages de l'application
+│   │   └── root.tsx          # Point d'entrée
+│   ├── core/web3/            # Configuration Web3
+│   └── public/               # Assets statiques
+│
+└── � Documentation/          # Guides et documentations
+    ├── GUIDE_UTILISATION.md
+    ├── CONFIGURATION.md
+    └── ...
 ```
 
-## 🚀 Installation et Démarrage
+## 🎮 Comment Utiliser l'Application
 
-### Backend (Smart Contracts)
+### 🔐 Connexion
 
-```bash
-# Depuis le dossier backend/
-cd backend
+1. Cliquez sur **"Connect Wallet"** en haut à droite
+2. Sélectionnez MetaMask (ou votre wallet préféré)
+3. Approuvez la connexion
 
-# Installer les dépendances
-npm install
+### 👑 En tant qu'Administrateur
 
-# Compiler les contrats
-npx hardhat compile
+L'administrateur est le compte qui a déployé le contrat (Account #0 de Hardhat par défaut).
 
-# Lancer un nœud local (dans un terminal séparé)
-npx hardhat node
+**Workflow complet** :
 
-# Déployer les contrats sur le réseau local
-npx hardhat ignition deploy ignition/modules/Voting.ts --network localhost
+1. **Phase 0 - Enregistrement des électeurs** 📝
+   - Ajoutez les adresses des électeurs autorisés
+   - Cliquez sur "Passer à la phase suivante"
+
+2. **Phase 1 - Début enregistrement des propositions** 💡
+   - Les électeurs peuvent soumettre leurs propositions
+   - Surveillez l'ajout des propositions
+
+3. **Phase 2 - Fin enregistrement des propositions** ⏸️
+   - Clôturez la soumission des propositions
+   - Passez à la phase de vote
+
+4. **Phase 3 - Début de la session de vote** 🗳️
+   - Les électeurs peuvent voter
+   - Surveillez la participation
+
+5. **Phase 4 - Fin de la session de vote** 🔒
+   - Clôturez le vote
+   - Aucun vote supplémentaire n'est accepté
+
+6. **Phase 5 - Comptabilisation** 🏆
+   - Le système détermine automatiquement le gagnant
+   - Les résultats sont publiés
+
+### 🗳️ En tant qu'Électeur
+
+1. **Vérifiez votre statut** : Vous devez être ajouté par l'admin
+2. **Soumettez une proposition** (Phase 1) :
+   - Allez sur votre dashboard électeur
+   - Entrez votre proposition
+   - Cliquez sur "Ajouter la proposition"
+
+3. **Votez** (Phase 3) :
+   - Consultez la liste des propositions
+   - Sélectionnez votre proposition préférée
+   - Cliquez sur "Voter"
+   - Confirmez la transaction dans MetaMask
+
+4. **Consultez les résultats** (Phase 5) :
+   - Allez sur la page "Résultats"
+   - Découvrez la proposition gagnante
+
+## 🔍 Fonctionnement Technique
+
+### Smart Contract - `Voting.sol`
+
+Le contrat gère 6 phases (workflow) :
+
+```solidity
+enum WorkflowStatus {
+    RegisteringVoters,              // 0: Ajout des électeurs
+    ProposalsRegistrationStarted,   // 1: Début propositions
+    ProposalsRegistrationEnded,     // 2: Fin propositions
+    VotingSessionStarted,           // 3: Début vote
+    VotingSessionEnded,             // 4: Fin vote
+    VotesTallied                    // 5: Résultats
+}
 ```
 
-### Frontend
+**Fonctions principales** :
+- `addVoter(address)` - Ajoute un électeur (admin seulement)
+- `addProposal(string)` - Ajoute une proposition (électeur)
+- `setVote(uint)` - Vote pour une proposition (électeur)
+- `tallyVotes()` - Comptabilise les votes (admin)
+- `getOneProposal(uint)` - Récupère une proposition
 
-```bash
-# Depuis le dossier frontend/
-cd frontend
+### Architecture Frontend
 
-# Installer les dépendances
-npm install
-
-# Mettre à jour l'adresse du contrat dans core/web3/contants.ts
-# avec l'adresse obtenue lors du déploiement
-
-# Démarrer l'application
-npm run dev
+```
+RainbowKit → Wagmi → Viem → Ethereum Node
+     ↓         ↓       ↓
+  Wallet   Hooks   Client   → Smart Contract
 ```
 
-L'application sera accessible sur `http://localhost:5173`
+**Hooks personnalisés** :
+- `useAddVoterToWhiteList()` - Ajouter un électeur
+- `useAddProposal()` - Soumettre une proposition
+- `useVote()` - Voter
+- `useGetWinner()` - Récupérer le gagnant
+- `useWorkflowStatus()` - État du workflow
 
 ## 🧪 Tests
 
-```bash
-# Tests backend (smart contracts)
-cd backend
-npx hardhat test
+### Tests Backend (Smart Contracts)
 
-# Tests frontend
+```bash
+cd backend
+npm test
+
+# Avec couverture
+npx hardhat coverage
+```
+
+### Tests Frontend
+
+```bash
 cd frontend
 npm test
+
+# Vérification TypeScript
+npm run typecheck
 ```
 
-## 📚 Documentation Complète
+## 🌐 Déploiement
 
-- **[Guide d'Utilisation](./GUIDE_UTILISATION.md)** : Instructions détaillées pour utiliser l'application
-- **[Configuration](./CONFIGURATION.md)** : Configuration des variables d'environnement et réseaux
-- **[Backend README](./backend/README.md)** : Documentation du backend
-- **[Frontend README](./frontend/README.md)** : Documentation du frontend
+### Déploiement Local (Développement)
 
-## 📝 Principes Suivis
+Suivez les étapes du [Démarrage Rapide](#-démarrage-rapide)
 
-- **Clean Code** : Code lisible, maintenable et bien organisé
-- **Software Craftsmanship** : Excellence technique et professionnalisme
-- **Documentation** : Code et fonctionnalités documentés
-- **Testing** : Couverture de tests complète
+### Déploiement sur Sepolia (Testnet)
 
-## ⚙️ Architecture Technique
+1. **Configurer les variables d'environnement** :
 
-### Smart Contract (Solidity)
-- **Voting.sol** : Contrat principal gérant le processus de vote
-  - Gestion des électeurs (liste blanche)
-  - Enregistrement des propositions
-  - Système de vote sécurisé
-  - Comptabilisation automatique des résultats
-  - Émission d'événements pour le tracking
-
-### Frontend (React)
-- **React Router** : Navigation et routing
-- **Wagmi** : Hooks React pour interagir avec Ethereum
-- **RainbowKit** : Connexion wallet intuitive
-- **Viem** : Client TypeScript pour Ethereum
-- **Tailwind CSS + shadcn/ui** : Design moderne et responsive
-
-### Composants Principaux
-```
-frontend/app/
-├── components/
-│   ├── adminDashboard.tsx          # Dashboard administrateur
-│   ├── voterDashboard.tsx          # Dashboard électeur
-│   ├── workflowStatusManagement.tsx # Gestion des phases
-│   └── shared/
-│       ├── addvoter.tsx            # Ajout d'électeurs
-│       ├── addProposals.tsx        # Ajout de propositions
-│       ├── vote.tsx                # Interface de vote
-│       ├── results.tsx             # Affichage des résultats
-│       └── proposalLIst.tsx        # Liste des propositions
-├── lib/hooks/
-│   ├── useAddVoterToWhiteList.ts   # Hook ajout électeur
-│   ├── useAddProposal.ts           # Hook ajout proposition
-│   ├── useVote.ts                  # Hook vote
-│   ├── useGetWinner.ts             # Hook récupération gagnant
-│   ├── userIsOwner.ts              # Vérification admin
-│   └── userIsVoter.ts              # Vérification électeur
-└── routes/
-    ├── index.tsx                   # Page d'accueil
-    ├── admin.tsx                   # Page admin
-    ├── voter.tsx                   # Page électeur
-    └── results.tsx                 # Page résultats
+```bash
+cd backend
+# Créez .env avec :
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/VOTRE_CLE
+SEPOLIA_PRIVATE_KEY=votre_cle_privee
 ```
 
-## 📋 Règles Fonctionnelles
+2. **Déployer le contrat** :
 
-Le système de vote implémente les règles suivantes :
+```bash
+npx hardhat ignition deploy ignition/modules/Voting.ts --network sepolia
+```
 
-✅ **L'enregistrement d'une liste blanche d'électeurs**
-   - Seul l'administrateur peut ajouter des électeurs
+3. **Configurer le frontend** :
 
-✅ **Démarrage de la session d'enregistrement des propositions**
-   - Contrôlé par l'administrateur
+```typescript
+// frontend/core/web3/contants.ts
+const CONTRACT_ADDRESS = '0xVotreAdresseSurSepolia';
+```
 
-✅ **Enregistrement des propositions**
-   - Accessible uniquement aux électeurs inscrits
+4. **Mettre à jour la configuration réseau** :
 
-✅ **Fin de la session d'enregistrement des propositions**
-   - Contrôlé par l'administrateur
+```typescript
+// frontend/app/components/shared/rainbowkitAndWagmiProvider.tsx
+chains: [sepolia]  // Retirer hardhat en production
+```
 
-✅ **Démarrage de la session de vote**
-   - Contrôlé par l'administrateur
+## 📄 Licence
 
-✅ **Vote pour les propositions**
-   - Accessible uniquement aux électeurs inscrits
-   - Un électeur ne peut voter qu'une seule fois
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](./LICENSE) pour plus de détails.
 
-✅ **Fin de la session de vote**
-   - Contrôlé par l'administrateur
+## 👨‍💻 Auteur
 
-✅ **Comptabilisation des votes**
-   - Effectuée par l'administrateur
-   - Détermine automatiquement la proposition gagnante
+**CygiK**
+- GitHub: [@CygiK](https://github.com/CygiK)
 
-✅ **Consultation des résultats**
-   - Accessible à tous après la comptabilisation
+---
 
-## � Fichiers Créés
+<div align="center">
 
-Cette implémentation a ajouté les fichiers suivants :
+**⭐ Si ce projet vous plaît, n'hésitez pas à lui donner une étoile ! ⭐**
 
-### Hooks Personnalisés
-- ✅ `frontend/app/lib/hooks/useVote.ts` - Vote pour une proposition
-- ✅ `frontend/app/lib/hooks/useGetWinner.ts` - Récupération du gagnant
+Fait avec ❤️ et ⚡ par [CygiK](https://github.com/CygiK)
 
-### Composants
-- ✅ `frontend/app/components/shared/vote.tsx` - Interface de vote
-- ✅ `frontend/app/components/shared/results.tsx` - Affichage des résultats
-- ✅ `frontend/app/components/voterDashboard.tsx` - Dashboard électeur complet
-
-### Pages
-- ✅ `frontend/app/routes/voter.tsx` - Page électeur
-- ✅ `frontend/app/routes/results.tsx` - Page résultats publique
-- ✅ `frontend/app/routes/index.tsx` - Page d'accueil améliorée
-- ✅ `frontend/app/routes/_layout.tsx` - Layout avec navigation
-
-### Documentation
-- ✅ `GUIDE_UTILISATION.md` - Guide utilisateur complet
-- ✅ `CONFIGURATION.md` - Instructions de configuration
-- ✅ `CHECKLIST.md` - Checklist de vérification
-- ✅ `IMPLEMENTATIONS.md` - Détails des implémentations
-- ✅ `UX_FLOW.md` - Flux utilisateur et captures d'écran
-- ✅ `QUICKSTART.md` - Démarrage rapide
-
-### Scripts
-- ✅ `start.sh` - Script de démarrage automatique
-
-## 🎯 État du Projet
-
-✅ **Application 100% fonctionnelle**
-- Toutes les règles fonctionnelles implémentées
-- Smart contract complet et testé
-- Frontend avec tous les composants
-- Documentation complète
-- Code suivant les principes du Clean Code
-
-## �👥 Contribution
-
-Ce projet suit les standards de qualité du Software Craftsmanship. Toute contribution doit respecter ces principes.
+</div>

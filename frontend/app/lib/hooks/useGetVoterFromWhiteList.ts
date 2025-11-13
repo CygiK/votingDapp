@@ -1,4 +1,5 @@
 import { VOTING_ABI, CONTRACT_ADDRESS, WORKFLOW_STEP_NAME, CONTRACT_ADDRESS_MAP  } from '../../../core/web3/contants'
+import { addressbyChainIdAndEnv } from '../../../core/web3/utils';
 
 import { useReadContract, useAccount, useWaitForTransactionReceipt, useChainId } from 'wagmi'
 
@@ -14,7 +15,7 @@ export function useGetVoterFromWhiteList(): Voter {
 
     const { data: voter } = useReadContract({
         abi: VOTING_ABI,
-        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
+        address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
         functionName: 'getVoter',
         args: [address],
     });

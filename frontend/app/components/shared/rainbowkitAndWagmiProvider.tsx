@@ -13,11 +13,16 @@ import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query";
+import { isProduction } from '~/lib/utils';
+
+const productionChains = [sepolia] as const;
+const developmentChains = [hardhat, sepolia] as const;
+const chains = isProduction ? productionChains : developmentChains;
 
 const config = getDefaultConfig({
   appName: 'VotingDApp',
   projectId: '43ad57af286e1c1ce143a75ef96efa3c',
-  chains: [hardhat, sepolia],
+  chains,
   ssr: false, // Désactivé pour éviter les problèmes ESM/CommonJS sur Vercel
 });
 

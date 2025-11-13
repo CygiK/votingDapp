@@ -1,5 +1,6 @@
 import { useReadContract, useWatchContractEvent, useChainId } from 'wagmi';
 import { CONTRACT_ADDRESS, VOTING_ABI, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants';
+import { addressbyChainIdAndEnv  } from '../../../core/web3/utils';
 import * as React from "react";
 import { Card, CardContent } from "../ui/card";
 import { Alert, AlertDescription } from "../ui/alert";
@@ -14,7 +15,7 @@ type Proposal = {
 function ProposalItem({ proposalId, isSelected, onClick }: { proposalId: bigint, isSelected: boolean, onClick: ({id, proposal}: {id: bigint, proposal: Proposal | {}}) => void }) {
     const chainId = useChainId();
     const { data: proposal, error } = useReadContract({
-        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
+        address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
         abi: VOTING_ABI,
         functionName: 'getOneProposal',
         args: [proposalId],
@@ -77,7 +78,7 @@ export function ProposalList() {
     const voter = useGetVoterFromWhiteList();
     
     useWatchContractEvent({
-        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
+        address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
         abi: VOTING_ABI,
         eventName: 'ProposalRegistered',
         onLogs(logs){

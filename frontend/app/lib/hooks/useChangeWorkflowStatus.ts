@@ -1,4 +1,5 @@
 import { VOTING_ABI, CONTRACT_ADDRESS, WORKFLOW_STEP_NAME, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants'
+import { addressbyChainIdAndEnv } from '../../../core/web3/utils';
 
 import { useWriteContract, useAccount, useWaitForTransactionReceipt, useChainId } from 'wagmi'
 import { getPublicClient } from '../../../core/web3/client'
@@ -13,7 +14,7 @@ export function useChangeWorkflowStatus() {
     const getEvent = React.useCallback(async () => {
         console.log("Fetching logs...");
         const event = await publicClient.getLogs({
-            address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
+            address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
             event: parseAbiItem('event WorkflowStatusChange(uint8 previousStatus, uint8 newStatus)'),
             fromBlock: 0n,
             toBlock: 'latest',
@@ -44,7 +45,7 @@ export function useChangeWorkflowStatus() {
 
     function changeWorkflowStatus () {
         writeContract({
-            address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
+            address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
             abi: VOTING_ABI,
             functionName: WORKFLOW_STEP_NAME[logs.length + 1],
             account: address,

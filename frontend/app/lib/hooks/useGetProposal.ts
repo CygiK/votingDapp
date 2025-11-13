@@ -1,4 +1,5 @@
 import { CONTRACT_ADDRESS, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants';
+import { addressbyChainIdAndEnv } from '../../../core/web3/utils';
 import * as React from 'react';
 import { parseAbiItem } from 'viem';
 import { getPublicClient } from '../../../core/web3/client';
@@ -15,7 +16,7 @@ export function useGetProposal() {
 
         try {
             const logs = await publicClient.getLogs({
-                address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
+                address: addressbyChainIdAndEnv(chainId as keyof typeof CONTRACT_ADDRESS_MAP),
                 event: parseAbiItem('event ProposalRegistered(uint256 proposalId)'),
                 fromBlock: 0n,
                 toBlock: 'latest'

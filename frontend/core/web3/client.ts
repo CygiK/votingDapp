@@ -14,8 +14,10 @@ export function getPublicClient(chainId: number = 31337) {
         },
     } as const;
 
+    const env = process.env.NODE_ENV;
+    const isProduction = env === "production";
     type ChainId = keyof typeof config;
-    const publicClient = createPublicClient(config[chainId as ChainId]);
+    const publicClient = createPublicClient(isProduction ? config[11155111] : config[chainId as ChainId]);
 
     return publicClient;
 }

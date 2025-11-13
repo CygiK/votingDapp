@@ -1,21 +1,21 @@
-import { CONTRACT_ADDRESS } from '../../../core/web3/contants';
+import { CONTRACT_ADDRESS, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants';
 import * as React from 'react';
 import { parseAbiItem } from 'viem';
-import { publicClient } from '../../../core/web3/client';
+import { getPublicClient } from '../../../core/web3/client';
+import { useChainId } from 'wagmi';
 
 export function useGetProposal() {
     const [logs, setLogs] = React.useState<any[]>([]);
-    // const [isLoading, setIsLoading] = React.useState(true);
-
+    const chainId = useChainId();
     const fetchLogs = React.useCallback(async () => {
+        const publicClient = getPublicClient(chainId);
         if (!publicClient) {
-            // setIsLoading(false);
             return;
         }
 
         try {
             const logs = await publicClient.getLogs({
-                address: CONTRACT_ADDRESS,
+                address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
                 event: parseAbiItem('event ProposalRegistered(uint256 proposalId)'),
                 fromBlock: 0n,
                 toBlock: 'latest'
@@ -25,7 +25,7 @@ export function useGetProposal() {
         } catch (error) {
             setLogs([]);
         }
-    }, [publicClient]);
+    }, [getPublicClient, chainId]);
 
     // Charger au montage
     React.useEffect(() => {

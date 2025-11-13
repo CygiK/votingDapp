@@ -1,5 +1,5 @@
-import { useReadContract } from 'wagmi';
-import { CONTRACT_ADDRESS, VOTING_ABI } from '../../../core/web3/contants';
+import { useReadContract, useChainId } from 'wagmi';
+import { CONTRACT_ADDRESS, VOTING_ABI, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants';
 
 /**
  * Hook personnalisé pour gérer le statut du workflow
@@ -7,8 +7,11 @@ import { CONTRACT_ADDRESS, VOTING_ABI } from '../../../core/web3/contants';
  */
 export function useWorkflowStatus() {
     // Récupère le statut actuel du workflow
+    const chainId = useChainId();
+    console.log("Current chain ID:", chainId);
+
     const { data: workflowStatus, isLoading, isError, refetch } = useReadContract({
-        address: CONTRACT_ADDRESS,
+        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
         abi: VOTING_ABI,
         functionName: 'getWorkflowStatus',
     });

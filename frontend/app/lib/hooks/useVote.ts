@@ -1,5 +1,5 @@
-import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { CONTRACT_ADDRESS, VOTING_ABI } from '../../../core/web3/contants';
+import { useWriteContract, useWaitForTransactionReceipt, useChainId } from 'wagmi';
+import { CONTRACT_ADDRESS, VOTING_ABI, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants';
 
 /**
  * Hook personnalisé pour permettre à un électeur de voter pour une proposition
@@ -13,6 +13,7 @@ import { CONTRACT_ADDRESS, VOTING_ABI } from '../../../core/web3/contants';
  */
 export function useVote() {
     const { data: hash, writeContract, isPending } = useWriteContract();
+    const chainId = useChainId();
 
     const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
         hash,
@@ -25,7 +26,7 @@ export function useVote() {
      */
     const vote = (proposalId: bigint) => {
         writeContract({
-            address: CONTRACT_ADDRESS,
+            address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
             abi: VOTING_ABI,
             functionName: 'setVote',
             args: [proposalId],

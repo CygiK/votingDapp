@@ -5,27 +5,8 @@ import { Alert, AlertDescription } from "./ui/alert";
 import { Separator } from "./ui/separator";
 import React from "react";
 
-/**
- * Composant de gestion du workflow de vote
- * Affiche l'état actuel et permet à l'administrateur de faire progresser le processus
- */
-export function WorkflowStatusManagement(): React.ReactNode {
-    const { getEvent, logs, changeWorkflowStatus, currentStatus, isPending, isConfirmed } = useChangeWorkflowStatus();
 
-    // Charger les événements au montage
-    React.useEffect(() => {
-        getEvent();
-    }, [getEvent]);
-
-    // Rafraîchir après confirmation de transaction
-    React.useEffect(() => {
-        if (isConfirmed) {
-            getEvent();
-        }
-    }, [isConfirmed, getEvent]);
-
-    // Mapping des phases avec des emojis et couleurs
-    const phaseInfo: Record<string, { emoji: string; color: string; description: string }> = {
+export const phaseInfo: Record<string, { emoji: string; color: string; description: string }> = {
         'RegisteringVoters': {
             emoji: '📝',
             color: 'bg-blue-50 border-blue-200',
@@ -57,6 +38,20 @@ export function WorkflowStatusManagement(): React.ReactNode {
             description: 'Votes comptabilisés, résultats disponibles'
         }
     };
+
+
+export function WorkflowStatusManagement(): React.ReactNode {
+    const { getEvent, logs, changeWorkflowStatus, currentStatus, isPending, isConfirmed } = useChangeWorkflowStatus();
+
+    React.useEffect(() => {
+        getEvent();
+    }, [getEvent]);
+
+    React.useEffect(() => {
+        if (isConfirmed) {
+            getEvent();
+        }
+    }, [isConfirmed, getEvent]);
 
     const currentPhase = phaseInfo[currentStatus.stepName] || { emoji: '⚙️', color: 'bg-gray-50 border-gray-200', description: 'État du workflow' };
     const nextPhase = phaseInfo[currentStatus.nextStepName] || { emoji: '➡️', color: '', description: '' };
@@ -94,7 +89,6 @@ export function WorkflowStatusManagement(): React.ReactNode {
 
                     <Separator />
 
-                    {/* Bouton d'action */}
                     {currentStatus.nextStepName && (
                         <div className="flex flex-col gap-2">
                             <Button 
@@ -124,7 +118,6 @@ export function WorkflowStatusManagement(): React.ReactNode {
                         </div>
                     )}
 
-                    {/* Historique des événements */}
                     {logs.length > 0 && (
                         <details className="mt-4">
                             <summary className="cursor-pointer text-sm font-medium text-gray-700 hover:text-gray-900">

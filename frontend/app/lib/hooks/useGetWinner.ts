@@ -1,14 +1,15 @@
-import { useReadContract } from 'wagmi';
-import { CONTRACT_ADDRESS, VOTING_ABI } from '../../../core/web3/contants';
+import { useReadContract, useChainId } from 'wagmi';
+import { CONTRACT_ADDRESS, VOTING_ABI, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants';
 
 export function useGetWinner() {
     // Récupère l'ID de la proposition gagnante
+    const chainId = useChainId();
     const { 
         data: winningProposalId, 
         isLoading: isLoadingId,
         isError: isErrorId 
     } = useReadContract({
-        address: CONTRACT_ADDRESS,
+        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
         abi: VOTING_ABI,
         functionName: 'winningProposalID',
     });
@@ -19,7 +20,7 @@ export function useGetWinner() {
         isLoading: isLoadingProposal,
         isError: isErrorProposal 
     } = useReadContract({
-        address: CONTRACT_ADDRESS,
+        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
         abi: VOTING_ABI,
         functionName: 'getOneProposal',
         args: [winningProposalId as bigint],

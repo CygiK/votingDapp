@@ -1,15 +1,11 @@
 import * as React from "react";
-import { useReadContracts, useAccount } from 'wagmi';
+import { useReadContracts, useReadContract, useAccount } from 'wagmi';
 import { CONTRACT_ADDRESS, VOTING_ABI } from '../../../core/web3/contants';
 import { useGetProposal, useVote } from "~/lib/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Alert, AlertDescription } from "../ui/alert";
 
-/**
- * Composant permettant aux électeurs de voter pour une proposition
- * Affiche la liste des propositions avec leurs votes et permet de voter
- */
 export function Vote(): React.ReactNode {
     const { logs } = useGetProposal();
     const { vote, isPending, isConfirming, isConfirmed } = useVote();
@@ -18,7 +14,6 @@ export function Vote(): React.ReactNode {
     const [hasVoted, setHasVoted] = React.useState(false);
     const [votedProposalId, setVotedProposalId] = React.useState<bigint | null>(null);
 
-    // Récupère toutes les propositions
     const proposalCalls = logs.map(log => ({
         address: CONTRACT_ADDRESS,
         abi: VOTING_ABI as any,
@@ -30,14 +25,11 @@ export function Vote(): React.ReactNode {
         contracts: proposalCalls as any,
     });
 
-    // Récupère les informations du votant
-    const { data: voterData } = useReadContracts({
-        contracts: [{
+    const { data: voterData }: any = useReadContract({
             address: CONTRACT_ADDRESS,
             abi: VOTING_ABI as any,
             functionName: 'getVoter' as const,
-            args: [address],
-        }] as any,
+            args: [address as `0x${string}` ],
     });
 
     React.useEffect(() => {
@@ -47,18 +39,13 @@ export function Vote(): React.ReactNode {
     }, [proposalsData]);
 
     React.useEffect(() => {
-        if (voterData && voterData[0]?.result) {
-            const voter = voterData[0].result as any;
+        if (voterData && voterData?.result) {
+            const voter = voterData?.result as any;
             setHasVoted(voter.hasVoted);
             setVotedProposalId(voter.votedProposalId);
         }
     }, [voterData]);
 
-    /**
-     * Gère le vote pour une proposition
-     * 
-     * @param proposalId - ID de la proposition
-     */
     const handleVote = (proposalId: bigint) => {
         if (!hasVoted && !isPending) {
             vote(proposalId);

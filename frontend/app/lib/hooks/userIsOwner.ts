@@ -1,14 +1,15 @@
-import { useAccount, useReadContract } from "wagmi";
+import { useAccount, useReadContract, useChainId } from "wagmi";
 import VotingDAppABI from "../../../core/web3/abi/voting.abi.json";
-import { CONTRACT_ADDRESS } from "../../../core/web3/contants";
+import { CONTRACT_ADDRESS, CONTRACT_ADDRESS_MAP } from "../../../core/web3/contants";
 
 
 export function userIsOwner(): boolean {
     const { address } = useAccount();
+    const chainId = useChainId();
     const addressToLower = address?.toLowerCase();
 
     const { data: owner } = useReadContract({
-        address: CONTRACT_ADDRESS,
+        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
         abi: VotingDAppABI,
         functionName: 'owner',
     });

@@ -1,30 +1,23 @@
 import * as React from "react";
-import { useReadContract } from 'wagmi';
-import { CONTRACT_ADDRESS, VOTING_ABI } from '../../../core/web3/contants';
+import { useReadContract, useChainId } from 'wagmi';
+import { CONTRACT_ADDRESS, CONTRACT_ADDRESS_MAP, VOTING_ABI } from '../../../core/web3/contants';
 import { useGetWinner, useGetProposal } from "~/lib/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Separator } from "../ui/separator";
 
-
-/**
- * Composant pour afficher les résultats du vote
- * Accessible à tous les utilisateurs (votants et non-votants)
- * Affiche la proposition gagnante et les statistiques de vote
- */
 export function Results(): React.ReactNode {
     const { winningProposalId, winningProposal, isLoading, isError } = useGetWinner();
     const { logs } = useGetProposal();
+    const chainId = useChainId();
     
-    // Récupère le statut du workflow
     const { data: workflowStatus } = useReadContract({
-        address: CONTRACT_ADDRESS,
+        address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
         abi: VOTING_ABI,
         functionName: 'getWorkflowStatus',
     });
 
-    const isVotesTallied = workflowStatus === 5; // VotesTallied
-
+    const isVotesTallied = workflowStatus === 5;
     if (!isVotesTallied) {
         return (
             <Alert>
@@ -71,9 +64,6 @@ export function Results(): React.ReactNode {
                         <div className="flex items-center gap-2">
                             <span className="text-lg font-bold text-green-700">
                                 {winningProposal.voteCount?.toString()} vote(s)
-                            </span>
-                            <span className="text-gray-600">
-                                • {logs.length > 0 ? Math.round((Number(winningProposal.voteCount) / logs.length) * 100) : 0}% des propositions
                             </span>
                         </div>
                     </CardContent>

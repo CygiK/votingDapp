@@ -4,11 +4,6 @@ import { Link, Outlet, useLocation } from "react-router";
 import { useAccount } from "wagmi";
 import { userIsVoter, userIsOwner } from "~/lib/hooks";
 
-
-/**
- * Layout principal de l'application
- * Gère la navigation et affiche le header/footer
- */
 export default function Layout(): React.ReactNode {
     const { isConnected } = useAccount();
     const { isVoter } = userIsVoter();
@@ -28,7 +23,6 @@ export default function Layout(): React.ReactNode {
                     <ConnectButton />
                 </div>
                 
-                {/* Navigation */}
                 <nav className="flex space-x-6 text-sm">
                     <Link 
                         to="/" 
@@ -46,7 +40,7 @@ export default function Layout(): React.ReactNode {
                         </Link>
                     )}
                     
-                    {isConnected && isVoter && (
+                    {isConnected && isVoter && !isOwner && (
                         <Link 
                             to="/voter" 
                             className={`hover:text-blue-600 transition-colors ${isActive("/voter")}`}

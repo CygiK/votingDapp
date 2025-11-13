@@ -3,7 +3,6 @@ import { useAccount } from "wagmi";
 import { userIsOwner, userIsVoter, useWorkflowStatus, useGetProposal, useGetWinner } from "~/lib/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
-import { Separator } from "~/components/ui/separator";
 import { Button } from "~/components/ui/button";
 import { Link } from "react-router";
 import { Results } from "~/components/shared/results";
@@ -152,16 +151,16 @@ export default function Index() {
                 </Alert>
             )}
 
-            <Separator />
+            {/* <Separator /> */}
 
             {/* Section Résultats */}
             {isVotesTallied && (
                 <Results />
             )}
 
-            <Separator />
+            {/* <Separator /> */}
             {/* Section À propos */}
-            <div className="gap-6">
+            {/* <div className="gap-6">
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
@@ -173,6 +172,7 @@ export default function Index() {
                         <div className="space-y-2">
                             {[
                                 { emoji: '�', title: '1. Enregistrement', desc: 'L\'admin ajoute les électeurs' },
+                                { emoji: '�', title: '2. Enregistrement', desc: 'L\'admin a fini l\'ajout des électeurs' },
                                 { emoji: '💡', title: '2. Propositions', desc: 'Les électeurs soumettent leurs idées' },
                                 { emoji: '🗳️', title: '3. Vote', desc: 'Chacun vote pour sa proposition préférée' },
                                 { emoji: '🏆', title: '4. Résultats', desc: 'Décompte transparent des votes' }
@@ -196,7 +196,7 @@ export default function Index() {
                         </div>
                     </CardContent>
                 </Card>
-            </div>
+            </div> */}
 
             {/* Footer info */}
             <Card className="bg-gray-50">

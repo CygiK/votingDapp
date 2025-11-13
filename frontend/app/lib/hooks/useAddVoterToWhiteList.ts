@@ -1,14 +1,15 @@
-import { VOTING_ABI, CONTRACT_ADDRESS } from '../../../core/web3/contants'
+import { VOTING_ABI, CONTRACT_ADDRESS, CONTRACT_ADDRESS_MAP } from '../../../core/web3/contants'
 
-import { useWriteContract, useAccount, useWaitForTransactionReceipt } from 'wagmi'
+import { useWriteContract, useAccount, useWaitForTransactionReceipt, useChainId } from 'wagmi'
 
 export function useAddVoterToWhiteList() {
     const {data: hash, writeContract} = useWriteContract();
     const { address } = useAccount();
+    const chainId = useChainId();
 
     const addVoterToWhiteList = (voterAddress: `0x${string}`) => {
         writeContract({
-            address: CONTRACT_ADDRESS,
+            address: CONTRACT_ADDRESS_MAP[chainId as keyof typeof CONTRACT_ADDRESS_MAP],
             abi: VOTING_ABI,
             functionName: 'addVoter',
             account: address,
